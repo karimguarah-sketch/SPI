@@ -167,58 +167,13 @@ export function BulkEditionPage({ onBack }: BulkEditionPageProps) {
             </div>
           </div>
 
-          {/* Parsed preview */}
-          {parsedRows && parsedRows.length > 0 && (
-            <div className="mt-5 border border-[#EEEEEE] rounded-lg overflow-hidden">
-              <div className="bg-[#F9F9F9] px-4 py-2 border-b border-[#EEEEEE]">
-                <h3 className="text-xs font-semibold text-[#666666] uppercase">
-                  Parsed data ({parsedRows.length} rows)
-                </h3>
-              </div>
-              <div className="overflow-x-auto max-h-64 overflow-y-auto">
-                <table className="w-full text-xs">
-                  <thead className="bg-[#F9F9F9] sticky top-0">
-                    <tr className="border-b border-[#EEEEEE]">
-                      <th className="px-4 py-3 text-left font-semibold text-[#666666]">Ref LM</th>
-                      <th className="px-4 py-3 text-left font-semibold text-[#666666]">Nouveau Prix</th>
-                      <th className="px-4 py-3 text-left font-semibold text-[#666666]">Cond.</th>
-                      <th className="px-4 py-3 text-left font-semibold text-[#666666]">GTIN</th>
-                      <th className="px-4 py-3 text-left font-semibold text-[#666666]">FOUCOM</th>
-                      <th className="px-4 py-3 text-left font-semibold text-[#666666]">Date</th>
-                      <th className="px-4 py-3 text-left font-semibold text-[#666666]">Mag.</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {parsedRows.slice(0, 15).map((row, i) => (
-                      <tr key={i} className="border-b border-[#EEEEEE] hover:bg-[#F9F9F9]">
-                        <td className="px-4 py-3 text-[#333333]">{row.refLM}</td>
-                        <td className="px-4 py-3 text-[#333333]">{row.nouveauPrixAchat}</td>
-                        <td className="px-4 py-3 text-[#666666]">{row.conditionnement}</td>
-                        <td className="px-4 py-3 text-[#666666]">{row.codeBarreGtin}</td>
-                        <td className="px-4 py-3 text-[#666666]">{row.foucom}</td>
-                        <td className="px-4 py-3 text-[#666666]">{row.dateApplication}</td>
-                        <td className="px-4 py-3 text-[#666666]">{row.listeMagasins}</td>
-                      </tr>
-                    ))}
-                    {parsedRows.length > 15 && (
-                      <tr>
-                        <td colSpan={7} className="px-4 py-3 text-center text-[#999999] text-xs">
-                          ... and {parsedRows.length - 15} more rows
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Detected changes — only shown when a file has been parsed */}
-        {detected && (
-          <div className="bg-white rounded-lg p-6 max-w-6xl" style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)' }}>
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-6">
-              {/* LEFT: info cards (only render the ones that changed) */}
+        {/* Summary + form — right column always visible; left cards shown only after upload */}
+        <div className="bg-white rounded-lg p-6 max-w-6xl" style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-6">
+            {/* LEFT: info cards (only render when a file has been parsed) */}
+            {detected ? (
               <div className="space-y-4">
                 {/* References */}
                 <InfoCard
@@ -301,9 +256,12 @@ export function BulkEditionPage({ onBack }: BulkEditionPageProps) {
                   </InfoCard>
                 )}
               </div>
+            ) : (
+              <div />
+            )}
 
-              {/* RIGHT: form */}
-              <div className="space-y-5">
+            {/* RIGHT: form (always visible) */}
+            <div className="space-y-5">
                 {/* Active date */}
                 <FormField label="Active date">
                   <DateInput value={activeDate} onChange={setActiveDate} />
@@ -392,10 +350,9 @@ export function BulkEditionPage({ onBack }: BulkEditionPageProps) {
                     )}
                   </div>
                 </FormField>
-              </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Footer */}
