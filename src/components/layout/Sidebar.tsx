@@ -1,6 +1,6 @@
 export function Sidebar() {
   return (
-    <aside className="w-14 bg-[#0c2e44] flex flex-col items-center py-3 shrink-0 text-white">
+    <aside className="w-14 bg-[#082435] flex flex-col items-center py-3 shrink-0 text-white">
       {/* Expand icon */}
       <button className="p-2 hover:bg-white/10 rounded-md transition-colors mb-4" aria-label="Expand">
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -16,7 +16,7 @@ export function Sidebar() {
       </button>
 
       {/* Active app icon (snowflake-like) */}
-      <button className="p-2 mt-4 text-[#0a8f8f]" aria-label="Purchase conditions">
+      <button className="p-2 mt-4 text-[#007F8C]" aria-label="Purchase conditions">
         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"
                 stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/>

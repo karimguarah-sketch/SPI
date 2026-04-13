@@ -1,31 +1,35 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 @theme {
-  --color-teal: #0a8f8f;
-  --color-teal-dark: #076666;
-  --color-teal-light: #d6ebeb;
-  --color-teal-bg: #e8f4f4;
-  --color-navy: #0c2e44;
-  --color-navy-dark: #0a2636;
-  --color-orange: #d97706;
-  --color-orange-light: #fef3c7;
-  --color-gray-50: #f8f9fa;
-  --color-gray-100: #f1f3f5;
-  --color-gray-200: #e9ecef;
-  --color-gray-300: #dee2e6;
-  --color-gray-400: #adb5bd;
-  --color-gray-500: #6c757d;
-  --color-gray-600: #495057;
-  --color-gray-700: #343a40;
+  --color-teal: #007F8C;
+  --color-teal-dark: #005C66;
+  --color-teal-light: #D9F0F3;
+  --color-teal-bg: #D9F0F3;
+  --color-navy: #082435;
+  --color-navy-dark: #051826;
+  --color-info-bg: #DAEFF7;
+  --color-info-border: #0B96CC;
+  --color-info-text: #005C91;
+  --color-orange: #D97706;
+  --color-orange-light: #FEF3C7;
+  --color-gray-50: #F8F9FA;
+  --color-gray-100: #F1F3F5;
+  --color-gray-200: #E9ECEF;
+  --color-gray-300: #DEE2E6;
+  --color-gray-400: #ADB5BD;
+  --color-gray-500: #808080;
+  --color-gray-600: #666666;
+  --color-gray-700: #333333;
   --color-gray-800: #212529;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Roboto', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f1f3f5;
+  background-color: #F1F3F5;
   color: #212529;
 }
 
@@ -38,20 +42,20 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f3f5;
+  background: #F1F3F5;
 }
 ::-webkit-scrollbar-thumb {
-  background: #ced4da;
+  background: #CED4DA;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #adb5bd;
+  background: #ADB5BD;
 }
 
 input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #0a8f8f;
+  accent-color: #007F8C;
   cursor: pointer;
 }
 
@@ -72,7 +76,7 @@ input[type="checkbox"] {
   position: absolute;
   cursor: pointer;
   inset: 0;
-  background-color: #ced4da;
+  background-color: #CED4DA;
   transition: .2s;
   border-radius: 24px;
 }
@@ -88,7 +92,7 @@ input[type="checkbox"] {
   border-radius: 50%;
 }
 .toggle-switch input:checked + .toggle-slider {
-  background-color: #0a8f8f;
+  background-color: #007F8C;
 }
 .toggle-switch input:checked + .toggle-slider:before {
   transform: translateX(20px);

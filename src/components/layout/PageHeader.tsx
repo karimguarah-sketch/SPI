@@ -25,7 +25,7 @@ export function PageHeader({ title, onBack, showTabs, activeTab = 'Activity' }: 
               </svg>
             </button>
           )}
-          <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+          <h1 className="text-[23px] font-bold text-[#333333]">{title}</h1>
         </div>
 
         <div className="flex items-center gap-4">
@@ -50,13 +50,13 @@ export function PageHeader({ title, onBack, showTabs, activeTab = 'Activity' }: 
               key={tab}
               className={`py-4 text-sm font-medium transition-colors relative ${
                 activeTab === tab
-                  ? 'text-[#0a8f8f]'
-                  : 'text-gray-500 hover:text-gray-800'
+                  ? 'text-[#007F8C]'
+                  : 'text-[#666666] hover:text-[#333333]'
               }`}
             >
               {tab}
               {activeTab === tab && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0a8f8f]" />
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#007F8C]" />
               )}
             </button>
           ))}
