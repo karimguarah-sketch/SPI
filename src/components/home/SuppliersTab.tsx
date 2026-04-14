@@ -96,7 +96,10 @@ export function SuppliersTab({ onSupplierClick }: Props) {
                   Yes
                 </span>
               ) : (
-                <span className="text-xs text-[#666666]">—</span>
+                <span className="inline-flex items-center gap-1 text-xs text-[#666666] font-semibold">
+                  <span className="w-2 h-2 bg-[#CCCCCC] rounded-full" />
+                  No
+                </span>
               )}
             </div>
             <div>

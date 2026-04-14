@@ -18,14 +18,11 @@ export function BulkEditionPage({ onBack }: BulkEditionPageProps) {
   const [parseError, setParseError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const [changeGtin, setChangeGtin] = useState(true);
   const [changePrices, setChangePrices] = useState(true);
-  const [gtinFileName, setGtinFileName] = useState<string | null>(null);
   const [activeDate, setActiveDate] = useState('23/04/2026');
   const [deliveryDate, setDeliveryDate] = useState('25/04/2026');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const gtinInputRef = useRef<HTMLInputElement>(null);
 
   // Detect changes from the uploaded file.
   // In a real implementation, each card would be derived from an actual diff.
@@ -62,11 +59,6 @@ export function BulkEditionPage({ onBack }: BulkEditionPageProps) {
     } finally {
       setIsProcessing(false);
     }
-  };
-
-  const handleGtinFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setGtinFileName(file.name);
   };
 
   const handleRemoveFile = () => {
@@ -270,67 +262,6 @@ export function BulkEditionPage({ onBack }: BulkEditionPageProps) {
                 {/* 1st possible delivery date */}
                 <FormField label="1st possible delivery date">
                   <DateInput value={deliveryDate} onChange={setDeliveryDate} />
-                </FormField>
-
-                {/* Gtin & supplier references */}
-                <FormField label="Gtin & supplier references">
-                  <div className="border border-[#CCCCCC] rounded-lg p-4 space-y-3">
-                    <div className="flex items-center gap-3">
-                      <ToggleSwitch checked={changeGtin} onChange={setChangeGtin} />
-                      <span className="text-sm font-semibold text-[#333333]">Change values</span>
-                    </div>
-                    {changeGtin && (
-                      <>
-                        <div className="flex items-center gap-2 text-sm text-[#333333]">
-                          <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                          <button
-                            onClick={handleDownload}
-                            className="underline hover:text-[#007F8C]"
-                          >
-                            Download template
-                          </button>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-[#333333]">
-                          <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                          <button
-                            onClick={() => gtinInputRef.current?.click()}
-                            className="underline hover:text-[#007F8C]"
-                          >
-                            Upload edited file
-                          </button>
-                          <input
-                            ref={gtinInputRef}
-                            type="file"
-                            accept=".xlsx,.xls"
-                            onChange={handleGtinFileSelect}
-                            className="hidden"
-                          />
-                        </div>
-                        {gtinFileName && (
-                          <div className="flex items-center gap-2 bg-[#F5F5F5] border border-[#EEEEEE] rounded px-3 py-2">
-                            <span className="flex-1 text-sm text-[#333333] truncate">{gtinFileName}</span>
-                            <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <circle cx="12" cy="12" r="10" strokeWidth={2} />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4" />
-                            </svg>
-                            <button
-                              onClick={() => setGtinFileName(null)}
-                              className="p-1 hover:bg-[#E9ECEF] rounded text-[#666666]"
-                              aria-label="Remove"
-                            >
-                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                              </svg>
-                            </button>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
                 </FormField>
 
                 {/* Purchase prices */}

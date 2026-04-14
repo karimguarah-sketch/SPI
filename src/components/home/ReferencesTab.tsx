@@ -33,8 +33,6 @@ export function ReferencesTab({ initialSupplier }: Props) {
   const [codesFilter, setCodesFilter] = useState('');
   const [supplierFilter, setSupplierFilter] = useState(initialSupplier ?? '');
   const [logisticFilter, setLogisticFilter] = useState('All');
-  const [selectedBreadcrumb, setSelectedBreadcrumb] = useState<'construccion' | 'ceramica'>('construccion');
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const filtered = useMemo(() => {
     let rows = ALL_REFERENCES;
@@ -55,44 +53,13 @@ export function ReferencesTab({ initialSupplier }: Props) {
   const hasSupplierFilter = supplierFilter.trim().length > 0;
   const showEmpty = filtered.length === 0;
 
-  const toggleSelect = (id: string) => {
-    setSelectedIds(prev => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  };
-
   return (
     <div className="px-8 pt-6 pb-12 flex-1 overflow-y-auto">
-      {/* Breadcrumb pills */}
-      <div className="flex items-center gap-2 mb-6">
-        <button
-          onClick={() => setSelectedBreadcrumb('construccion')}
-          className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-            selectedBreadcrumb === 'construccion'
-              ? 'bg-[#007F8C] text-white border-[#007F8C]'
-              : 'bg-white text-[#333333] border-[#CCCCCC]'
-          }`}
-        >
-          1 - Materiales de construccion
-        </button>
-        <button
-          onClick={() => setSelectedBreadcrumb('ceramica')}
-          className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-            selectedBreadcrumb === 'ceramica'
-              ? 'bg-[#007F8C] text-white border-[#007F8C]'
-              : 'bg-white text-[#333333] border-[#CCCCCC]'
-          }`}
-        >
-          6 - Ceramica
-        </button>
-      </div>
-
       {/* Filters row */}
       <h2 className="text-base font-bold text-[#333333] mb-3">Filter references</h2>
       <div className={`grid gap-4 mb-4 ${hasSupplierFilter ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
         <div>
+          <label className="block text-sm text-[#666666] mb-1.5">References</label>
           <SearchInput
             value={codesFilter}
             onChange={setCodesFilter}
@@ -132,15 +99,12 @@ export function ReferencesTab({ initialSupplier }: Props) {
       {/* Table */}
       <div className="bg-white rounded-lg overflow-hidden" style={{ boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05)' }}>
         {/* Header */}
-        <div className="grid grid-cols-[40px_1.3fr_1.4fr_1fr_1fr_1fr] items-center bg-white border-b border-[#EEEEEE] px-4">
-          <div>
-            <input type="checkbox" className="accent-[#007F8C]" />
-          </div>
+        <div className="grid grid-cols-[1.3fr_1.4fr_1fr_1fr_1fr] items-center bg-white border-b border-[#EEEEEE] px-4">
           <ColumnHeader label="DESIGNATION" sublabel="code" />
           <ColumnHeader label="COMMERCIAL SUPPLIER" sublabel="id code / departement" />
           <ColumnHeader label="PARTNER" sublabel="id code" />
           <ColumnHeader label={hasSupplierFilter ? 'GTIN' : 'CIRCUIT'} sublabel={hasSupplierFilter ? '' : 'incoterm'} />
-          <ColumnHeader label={hasSupplierFilter ? 'LOGISTIC FLOW' : 'ZONE'} sublabel={hasSupplierFilter ? 'number of sites' : 'number of sites'} />
+          <ColumnHeader label={hasSupplierFilter ? 'LOGISTIC FLOW' : 'ZONE'} sublabel="number of sites" />
         </div>
 
         {showEmpty ? (
@@ -162,17 +126,8 @@ export function ReferencesTab({ initialSupplier }: Props) {
             {filtered.map(row => (
               <div
                 key={row.id}
-                className="grid grid-cols-[40px_1.3fr_1.4fr_1fr_1fr_1fr] items-center px-4 py-3 border-b border-[#EEEEEE] last:border-b-0 hover:bg-[#F9F9F9]"
+                className="grid grid-cols-[1.3fr_1.4fr_1fr_1fr_1fr] items-center px-4 py-3 border-b border-[#EEEEEE] last:border-b-0 hover:bg-[#F9F9F9]"
               >
-                <div>
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.has(row.id)}
-                    onChange={() => toggleSelect(row.id)}
-                    disabled={row.ongoingChange}
-                    className="accent-[#007F8C]"
-                  />
-                </div>
                 <div className="min-w-0">
                   <p className="text-sm text-[#333333] truncate" title={row.designation}>{row.designation}</p>
                   <p className="text-xs text-[#666666]">{row.code}</p>

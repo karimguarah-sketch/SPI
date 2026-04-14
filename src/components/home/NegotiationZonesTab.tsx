@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import type { ActivityItem } from './ActivityTab';
 
 type Zone = 'National' | 'Multi Zone' | 'Group of sites';
 
@@ -22,9 +23,15 @@ const INITIAL_ROWS: NegoRow[] = [
   { id: '8', supplierName: 'Text', supplierCode: 'Text', partnerName: 'Herramienta', partnerCode: '4', zone: 'Multi Zone' },
 ];
 
-export function NegotiationZonesTab() {
+interface Props {
+  onSave: (item: ActivityItem) => void;
+}
+
+export function NegotiationZonesTab({ onSave }: Props) {
   const [search, setSearch] = useState('');
   const [rows, setRows] = useState(INITIAL_ROWS);
+  const [pendingChanges, setPendingChanges] = useState<Record<string, Zone>>({});
+  const [confirmed, setConfirmed] = useState(false);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return rows;
@@ -37,6 +44,40 @@ export function NegotiationZonesTab() {
 
   const setZone = (id: string, zone: Zone) => {
     setRows(prev => prev.map(r => r.id === id ? { ...r, zone } : r));
+    setPendingChanges(prev => {
+      const original = INITIAL_ROWS.find(r => r.id === id);
+      const next = { ...prev };
+      if (original && original.zone === zone) delete next[id];
+      else next[id] = zone;
+      return next;
+    });
+  };
+
+  const changedCount = Object.keys(pendingChanges).length;
+
+  const handleSave = () => {
+    if (changedCount === 0) return;
+    const firstId = Object.keys(pendingChanges)[0];
+    const firstRow = rows.find(r => r.id === firstId);
+    const today = new Date();
+    const fmt = (d: Date) => `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+    const activation = new Date(today);
+    activation.setDate(today.getDate() + 14);
+    const item: ActivityItem = {
+      id: `nz-${Date.now()}`,
+      status: 'waiting',
+      activationDate: fmt(activation),
+      requestDate: fmt(today),
+      requestId: `REQ-${Math.floor(20000000 + Math.random() * 9999999)}`,
+      referencesCount: changedCount,
+      supplier: firstRow ? `${firstRow.supplierName} (${firstRow.supplierCode})` : 'Multiple suppliers',
+      supplierZone: firstRow ? pendingChanges[firstRow.id] : undefined,
+      circuit: 'Negotiation zone',
+      warehouses: `${changedCount} supplier${changedCount > 1 ? 's' : ''} updated`,
+    };
+    onSave(item);
+    setConfirmed(true);
+    setPendingChanges({});
   };
 
   return (
@@ -112,6 +153,24 @@ export function NegotiationZonesTab() {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Save modification CTA */}
+      <div className="flex items-center justify-between mt-6">
+        <div className="text-sm text-[#666666]">
+          {changedCount > 0
+            ? `${changedCount} pending change${changedCount > 1 ? 's' : ''}`
+            : confirmed
+              ? 'Request created — see the Activity tab.'
+              : 'No changes yet.'}
+        </div>
+        <button
+          onClick={handleSave}
+          disabled={changedCount === 0}
+          className="px-5 py-2.5 bg-[#007F8C] text-white rounded text-sm font-bold hover:bg-[#005C66] transition-colors disabled:bg-[#CCCCCC] disabled:text-[#666666] disabled:cursor-not-allowed"
+        >
+          Save modification
+        </button>
       </div>
     </div>
   );

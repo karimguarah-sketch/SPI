@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-interface ActivityItem {
+export interface ActivityItem {
   id: string;
   status: 'waiting' | 'validated' | 'rejected';
   activationDate: string;
@@ -9,12 +9,12 @@ interface ActivityItem {
   referencesCount: number;
   referencesPreview?: string;
   supplier?: string;
-  supplierZone?: 'National' | 'Multi Zone';
+  supplierZone?: 'National' | 'Multi Zone' | 'Group of sites';
   circuit?: string;
   warehouses?: string;
 }
 
-const INITIAL_FUTURE_CHANGES: ActivityItem[] = [
+export const INITIAL_FUTURE_CHANGES: ActivityItem[] = [
   {
     id: 'c1',
     status: 'waiting',
@@ -79,16 +79,17 @@ const INITIAL_FUTURE_CHANGES: ActivityItem[] = [
 
 interface Props {
   onStartBulkEdition: () => void;
+  items: ActivityItem[];
+  onDeleteItem: (id: string) => void;
 }
 
-export function ActivityTab({ onStartBulkEdition }: Props) {
+export function ActivityTab({ onStartBulkEdition, items, onDeleteItem }: Props) {
   const [activeTab, setActiveTab] = useState<'future' | 'past'>('future');
-  const [items, setItems] = useState<ActivityItem[]>(INITIAL_FUTURE_CHANGES);
   const [pendingDelete, setPendingDelete] = useState<ActivityItem | null>(null);
 
   const handleDelete = (item: ActivityItem) => setPendingDelete(item);
   const confirmDelete = () => {
-    if (pendingDelete) setItems(prev => prev.filter(i => i.id !== pendingDelete.id));
+    if (pendingDelete) onDeleteItem(pendingDelete.id);
     setPendingDelete(null);
   };
 
