@@ -2,6 +2,8 @@
 @import "./fonts.css";
 
 @theme {
+  --font-sans: 'Roboto', system-ui, -apple-system, sans-serif;
+  --default-font-family: 'Roboto', system-ui, -apple-system, sans-serif;
   --color-teal: #007F8C;
   --color-teal-dark: #005C66;
   --color-teal-light: #D9F0F3;
@@ -24,9 +26,12 @@
   --color-gray-800: #212529;
 }
 
+html, body, button, input, select, textarea {
+  font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: 'Roboto', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #F1F3F5;
