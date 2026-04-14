@@ -32,6 +32,7 @@ export function NegotiationZonesTab({ onSave }: Props) {
   const [rows, setRows] = useState(INITIAL_ROWS);
   const [pendingChanges, setPendingChanges] = useState<Record<string, Zone>>({});
   const [confirmed, setConfirmed] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return rows;
@@ -165,13 +166,48 @@ export function NegotiationZonesTab({ onSave }: Props) {
               : 'No changes yet.'}
         </div>
         <button
-          onClick={handleSave}
+          onClick={() => setShowConfirm(true)}
           disabled={changedCount === 0}
           className="px-5 py-2.5 bg-[#007F8C] text-white rounded text-sm font-bold hover:bg-[#005C66] transition-colors disabled:bg-[#CCCCCC] disabled:text-[#666666] disabled:cursor-not-allowed"
         >
           Save modification
         </button>
       </div>
+
+      {/* Confirm save modal */}
+      {showConfirm && (
+        <div
+          className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+          onClick={() => setShowConfirm(false)}
+        >
+          <div
+            className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-base font-bold text-[#333333] mb-2">Confirm change</h3>
+            <p className="text-sm text-[#666666] mb-6">
+              Are you sure you want to confirm {changedCount === 1 ? 'this change' : `these ${changedCount} changes`}? A new request will be created.
+            </p>
+            <div className="flex items-center justify-end gap-3">
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="px-5 py-2.5 bg-white border border-[#CCCCCC] rounded text-sm font-bold text-[#333333] hover:bg-[#F5F5F5] transition-colors"
+              >
+                No
+              </button>
+              <button
+                onClick={() => {
+                  setShowConfirm(false);
+                  handleSave();
+                }}
+                className="px-5 py-2.5 bg-[#007F8C] text-white rounded text-sm font-bold hover:bg-[#005C66] transition-colors"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

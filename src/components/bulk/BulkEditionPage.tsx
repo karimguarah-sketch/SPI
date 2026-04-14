@@ -17,6 +17,7 @@ export function BulkEditionPage({ onBack }: BulkEditionPageProps) {
   const [parsedRows, setParsedRows] = useState<RempafourRow[] | null>(null);
   const [parseError, setParseError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showConfirmRequest, setShowConfirmRequest] = useState(false);
 
   const [changePrices, setChangePrices] = useState(true);
   const [activeDate, setActiveDate] = useState('23/04/2026');
@@ -51,10 +52,14 @@ export function BulkEditionPage({ onBack }: BulkEditionPageProps) {
     setUploadedFile(file);
     setIsProcessing(true);
     setParseError(null);
+    // Keep the loading spinner visible long enough to feel realistic even if
+    // the parse itself completes instantly on small files.
+    const minDelay = new Promise(resolve => setTimeout(resolve, 1500));
     try {
-      const rows = await parseRempafourFile(file);
+      const [rows] = await Promise.all([parseRempafourFile(file), minDelay]);
       setParsedRows(rows);
     } catch (err) {
+      await minDelay;
       setParseError(err instanceof Error ? err.message : 'Error parsing file');
     } finally {
       setIsProcessing(false);
@@ -295,16 +300,68 @@ export function BulkEditionPage({ onBack }: BulkEditionPageProps) {
           Cancel edition
         </button>
         <button
-          onClick={() => {
-            alert('Change request confirmed!');
-            onBack();
-          }}
+          onClick={() => setShowConfirmRequest(true)}
           disabled={!parsedRows || parsedRows.length === 0}
           className="px-5 py-2.5 bg-[#007F8C] text-white rounded text-sm font-bold hover:bg-[#005C66] transition-colors disabled:bg-[#CCCCCC] disabled:text-[#666666] disabled:cursor-not-allowed"
         >
           Confirm change request
         </button>
       </div>
+
+      {/* Loading spinner modal */}
+      {isProcessing && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg px-8 py-8 flex flex-col items-center gap-4 shadow-xl">
+            <svg className="animate-spin w-10 h-10 text-[#007F8C]" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              />
+            </svg>
+            <div className="text-center">
+              <p className="text-base font-bold text-[#333333]">Processing your file…</p>
+              <p className="text-sm text-[#666666] mt-1">Detecting changes from your Purchase condition file.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm change request modal */}
+      {showConfirmRequest && (
+        <div
+          className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+          onClick={() => setShowConfirmRequest(false)}
+        >
+          <div
+            className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-base font-bold text-[#333333] mb-2">Confirm change request</h3>
+            <p className="text-sm text-[#666666] mb-6">
+              Are you sure you want to confirm this change request? This action will create a new request.
+            </p>
+            <div className="flex items-center justify-end gap-3">
+              <button
+                onClick={() => setShowConfirmRequest(false)}
+                className="px-5 py-2.5 bg-white border border-[#CCCCCC] rounded text-sm font-bold text-[#333333] hover:bg-[#F5F5F5] transition-colors"
+              >
+                No
+              </button>
+              <button
+                onClick={() => {
+                  setShowConfirmRequest(false);
+                  onBack();
+                }}
+                className="px-5 py-2.5 bg-[#007F8C] text-white rounded text-sm font-bold hover:bg-[#005C66] transition-colors"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

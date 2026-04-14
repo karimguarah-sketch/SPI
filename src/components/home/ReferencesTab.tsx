@@ -103,8 +103,8 @@ export function ReferencesTab({ initialSupplier }: Props) {
           <ColumnHeader label="DESIGNATION" sublabel="code" />
           <ColumnHeader label="COMMERCIAL SUPPLIER" sublabel="id code / departement" />
           <ColumnHeader label="PARTNER" sublabel="id code" />
-          <ColumnHeader label={hasSupplierFilter ? 'GTIN' : 'CIRCUIT'} sublabel={hasSupplierFilter ? '' : 'incoterm'} />
-          <ColumnHeader label={hasSupplierFilter ? 'LOGISTIC FLOW' : 'ZONE'} sublabel="number of sites" />
+          <ColumnHeader label="GTIN" />
+          <ColumnHeader label="LOGISTIC FLOW" sublabel="number of sites" />
         </div>
 
         {showEmpty ? (
