@@ -89,61 +89,64 @@ export function BulkEditionPage({ onBack }: BulkEditionPageProps) {
             {/* Download */}
             <button
               onClick={handleDownload}
-              className="flex items-center gap-4 p-4 border border-[#CCCCCC] rounded-lg hover:border-[#007F8C] hover:bg-[#F0F9F9] transition-colors text-left"
+              className="w-full bg-white border-2 border-[#007F8C] rounded-lg p-5 flex items-center gap-4 hover:bg-[#F0F9F9] transition-colors text-left group"
             >
-              <div className="w-10 h-10 rounded-full bg-[#D9F0F3] flex items-center justify-center shrink-0">
-                <svg className="w-5 h-5 text-[#007F8C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
+              <svg className="w-6 h-6 text-[#007F8C] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <div className="flex-1 min-w-0">
+                <p className="text-base font-bold text-[#007F8C]">Download Purchase condition Template</p>
+                <p className="text-sm text-[#666666] mt-0.5">Switch supplier, logistic flow - circuit within csv file</p>
               </div>
-              <div>
-                <p className="font-semibold text-[#333333] text-sm">Download Purchase condition Template</p>
-                <p className="text-xs text-[#666666] mt-0.5">Switch supplier, logistic flow - circuit within csv file</p>
-              </div>
+              <svg className="w-5 h-5 text-[#007F8C] shrink-0 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </button>
 
             {/* Upload */}
             <div>
               <label
-                className={`flex items-center gap-4 p-4 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
+                className={`w-full bg-white border-2 rounded-lg p-5 flex items-center gap-4 transition-colors cursor-pointer group ${
                   uploadedFile
                     ? 'border-[#007F8C] bg-[#F0F9F9]'
-                    : 'border-[#CCCCCC] hover:border-[#007F8C] hover:bg-[#F0F9F9]'
+                    : 'border-[#007F8C] hover:bg-[#F0F9F9]'
                 }`}
               >
-                <div className="w-10 h-10 rounded-full bg-[#D9F0F3] flex items-center justify-center shrink-0">
-                  <svg className="w-5 h-5 text-[#007F8C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                </div>
+                <svg className="w-6 h-6 text-[#007F8C] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
                 <div className="flex-1 min-w-0">
                   {uploadedFile ? (
                     <>
-                      <p className="font-semibold text-[#333333] text-sm truncate">{uploadedFile.name}</p>
-                      <p className="text-xs text-[#666666] mt-0.5">
+                      <p className="text-base font-bold text-[#007F8C] truncate">{uploadedFile.name}</p>
+                      <p className="text-sm text-[#666666] mt-0.5">
                         {isProcessing ? 'Processing...' : parsedRows ? `${parsedRows.length} rows parsed` : parseError || ''}
                       </p>
                     </>
                   ) : (
                     <>
-                      <p className="font-semibold text-[#333333] text-sm">Upload Purchase condition file</p>
-                      <p className="text-xs text-[#666666] mt-0.5">.xlsx, .xls, .csv</p>
+                      <p className="text-base font-bold text-[#007F8C]">Upload Purchase condition file</p>
+                      <p className="text-sm text-[#666666] mt-0.5">.xlsx, .xls, .csv</p>
                     </>
                   )}
                 </div>
-                {uploadedFile && (
+                {uploadedFile ? (
                   <button
                     onClick={(e) => {
                       e.preventDefault();
                       handleRemoveFile();
                     }}
-                    className="p-1.5 hover:bg-white rounded text-[#666666]"
+                    className="p-1.5 hover:bg-white rounded text-[#666666] shrink-0"
                     aria-label="Remove file"
                   >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
+                ) : (
+                  <svg className="w-5 h-5 text-[#007F8C] shrink-0 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 )}
                 <input
                   ref={fileInputRef}
