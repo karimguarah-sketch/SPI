@@ -5,7 +5,7 @@ interface ActivityItem {
   status: 'waiting' | 'validated' | 'rejected';
   activationDate: string;
   requestDate: string;
-  requestAuthor: string;
+  requestId: string;
   referencesCount: number;
   referencesPreview?: string;
   supplier?: string;
@@ -14,13 +14,13 @@ interface ActivityItem {
   warehouses?: string;
 }
 
-const FUTURE_CHANGES: ActivityItem[] = [
+const INITIAL_FUTURE_CHANGES: ActivityItem[] = [
   {
     id: 'c1',
     status: 'waiting',
     activationDate: '18/3/2026',
     requestDate: '22/3/2026',
-    requestAuthor: '20025420',
+    requestId: 'REQ-20025420',
     referencesCount: 444,
     supplier: 'ROCA SANITARIO TR (345657)',
     supplierZone: 'National',
@@ -30,47 +30,47 @@ const FUTURE_CHANGES: ActivityItem[] = [
   {
     id: 'c2',
     status: 'waiting',
-    activationDate: '18/3/2026',
-    requestDate: '22/3/2026',
-    requestAuthor: '20025420',
+    activationDate: '02/4/2026',
+    requestDate: '25/3/2026',
+    requestId: 'REQ-20031842',
     referencesCount: 42,
-    supplier: 'ROCA SANITARIO TR (345657)',
-    supplierZone: 'National',
-    circuit: 'Direct - DDP',
+    supplier: 'GRUPO PUMA ESPAÑA (204304)',
+    supplierZone: 'Multi Zone',
+    circuit: 'Stock - EXW',
     warehouses: '29 warehouses',
   },
   {
     id: 'c3',
     status: 'waiting',
-    activationDate: '18/3/2026',
-    requestDate: '22/3/2026',
-    requestAuthor: '20025420',
-    referencesCount: 444,
-    supplier: 'ROCA SANITARIO TR (345657)',
+    activationDate: '15/4/2026',
+    requestDate: '01/4/2026',
+    requestId: 'REQ-20042567',
+    referencesCount: 128,
+    supplier: 'Henkel Iberica (765456)',
     supplierZone: 'National',
     circuit: 'Direct - DDP',
-    warehouses: '112 warehouses',
+    warehouses: '87 warehouses',
   },
   {
     id: 'c4',
     status: 'waiting',
-    activationDate: '18/3/2026',
-    requestDate: '22/3/2026',
-    requestAuthor: '20025420',
-    referencesCount: 444,
-    supplier: 'ROCA SANITARIO TR (345657)',
+    activationDate: '28/4/2026',
+    requestDate: '10/4/2026',
+    requestId: 'REQ-20055109',
+    referencesCount: 7,
+    supplier: '3M ESPANA (76808)',
     supplierZone: 'National',
-    circuit: 'Direct - DDP',
-    warehouses: '112 warehouses',
+    circuit: 'Ship from partner - DDP',
+    warehouses: '56 warehouses',
   },
   {
     id: 'c5',
     status: 'waiting',
-    activationDate: '18/3/2026',
-    requestDate: '22/3/2026',
-    requestAuthor: '20025420',
-    referencesCount: 444,
-    supplier: 'ROCA SANITARIO TR (345657)',
+    activationDate: '12/5/2026',
+    requestDate: '22/4/2026',
+    requestId: 'REQ-20068774',
+    referencesCount: 216,
+    supplier: 'ROCA SANITARIO SA (999888)',
     supplierZone: 'National',
     circuit: 'Direct - DDP',
     warehouses: '112 warehouses',
@@ -83,6 +83,14 @@ interface Props {
 
 export function ActivityTab({ onStartBulkEdition }: Props) {
   const [activeTab, setActiveTab] = useState<'future' | 'past'>('future');
+  const [items, setItems] = useState<ActivityItem[]>(INITIAL_FUTURE_CHANGES);
+  const [pendingDelete, setPendingDelete] = useState<ActivityItem | null>(null);
+
+  const handleDelete = (item: ActivityItem) => setPendingDelete(item);
+  const confirmDelete = () => {
+    if (pendingDelete) setItems(prev => prev.filter(i => i.id !== pendingDelete.id));
+    setPendingDelete(null);
+  };
 
   return (
     <div className="flex-1 overflow-y-auto px-8 pt-6 pb-12">
@@ -158,7 +166,7 @@ export function ActivityTab({ onStartBulkEdition }: Props) {
           {/* Items */}
           <div>
             {activeTab === 'future' ? (
-              FUTURE_CHANGES.map(item => <ActivityRow key={item.id} item={item} />)
+              items.map(item => <ActivityRow key={item.id} item={item} onDelete={handleDelete} />)
             ) : (
               <div className="p-8 text-center text-[#999999] text-sm">No past changes yet.</div>
             )}
@@ -172,7 +180,7 @@ export function ActivityTab({ onStartBulkEdition }: Props) {
                 <option>10</option>
                 <option>25</option>
               </select>
-              <span className="ml-3 text-[#666666]">1-3 of 3 items</span>
+              <span className="ml-3 text-[#666666]">1-{items.length} of {items.length} items</span>
             </div>
             <div className="flex items-center gap-2">
               <button className="w-8 h-8 bg-[#333333] text-white rounded flex items-center justify-center disabled:opacity-40" disabled>
@@ -195,11 +203,39 @@ export function ActivityTab({ onStartBulkEdition }: Props) {
           </div>
         </div>
       </section>
+
+      {/* Delete confirmation modal */}
+      {pendingDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setPendingDelete(null)}>
+          <div
+            className="bg-white rounded-lg p-6 max-w-md w-full mx-4"
+            style={{ boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-lg font-bold text-[#333333] mb-2">Delete request</h3>
+            <p className="text-sm text-[#666666] mb-5">Are you sure to delete this request?</p>
+            <div className="flex items-center justify-end gap-3">
+              <button
+                onClick={() => setPendingDelete(null)}
+                className="px-5 py-2.5 bg-white border border-[#CCCCCC] rounded text-sm font-bold text-[#333333] hover:bg-[#F5F5F5] transition-colors"
+              >
+                No
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-5 py-2.5 bg-[#007F8C] text-white rounded text-sm font-bold hover:bg-[#005C66] transition-colors"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-function ActivityRow({ item }: { item: ActivityItem }) {
+function ActivityRow({ item, onDelete }: { item: ActivityItem; onDelete: (item: ActivityItem) => void }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -245,7 +281,7 @@ function ActivityRow({ item }: { item: ActivityItem }) {
       <div className="flex items-center gap-5 text-xs min-w-0 flex-1">
         <InfoItem label="Activation date" value={item.activationDate} />
         <InfoItem label="Request date" value={item.requestDate} />
-        <InfoItem label="Request author" value={item.requestAuthor} />
+        <InfoItem label="Request ID" value={item.requestId} />
       </div>
 
       {/* Circuit pill */}
@@ -271,7 +307,7 @@ function ActivityRow({ item }: { item: ActivityItem }) {
 
       {/* Action icons */}
       <div className="flex items-center gap-1 shrink-0">
-        <button className="p-2 text-red-500 hover:bg-red-50 rounded transition-colors" aria-label="Delete">
+        <button onClick={() => onDelete(item)} className="p-2 text-red-500 hover:bg-red-50 rounded transition-colors" aria-label="Delete">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
@@ -292,7 +328,7 @@ function ActivityRow({ item }: { item: ActivityItem }) {
             <div className="absolute right-0 top-10 z-10 bg-white border border-[#EEEEEE] rounded-lg shadow-lg min-w-[200px] py-2">
               <MenuButton label="See request detail" />
               <MenuButton label="Edit request" />
-              <MenuButton label="Delete the request" danger />
+              <MenuButton label="Delete the request" danger onClick={() => { setMenuOpen(false); onDelete(item); }} />
             </div>
           )}
         </div>
@@ -301,9 +337,12 @@ function ActivityRow({ item }: { item: ActivityItem }) {
   );
 }
 
-function MenuButton({ label, danger }: { label: string; danger?: boolean }) {
+function MenuButton({ label, danger, onClick }: { label: string; danger?: boolean; onClick?: () => void }) {
   return (
-    <button className={`w-full text-left px-4 py-2 text-sm hover:bg-[#F5F5F5] ${danger ? 'text-red-600' : 'text-[#333333]'}`}>
+    <button
+      onClick={onClick}
+      className={`w-full text-left px-4 py-2 text-sm hover:bg-[#F5F5F5] ${danger ? 'text-red-600' : 'text-[#333333]'}`}
+    >
       {label}
     </button>
   );
