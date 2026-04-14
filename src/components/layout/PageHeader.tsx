@@ -1,15 +1,14 @@
-import React from 'react';
-
 interface PageHeaderProps {
   title: string;
   onBack?: () => void;
   showTabs?: boolean;
   activeTab?: string;
+  onTabChange?: (tab: string) => void;
 }
 
-export function PageHeader({ title, onBack, showTabs, activeTab = 'Activity' }: PageHeaderProps) {
-  const tabs = ['Activity', 'References', 'Suppliers', 'Negotiation zones'];
+const TABS = ['Activity', 'References', 'Suppliers', 'Negotiation zones'];
 
+export function PageHeader({ title, onBack, showTabs, activeTab = 'Activity', onTabChange }: PageHeaderProps) {
   return (
     <div className="bg-white shrink-0">
       <div className="flex items-center justify-between px-8 py-5">
@@ -45,12 +44,13 @@ export function PageHeader({ title, onBack, showTabs, activeTab = 'Activity' }: 
 
       {showTabs && (
         <div className="flex items-center gap-8 px-8 border-t border-gray-200">
-          {tabs.map(tab => (
+          {TABS.map(tab => (
             <button
               key={tab}
+              onClick={() => onTabChange?.(tab)}
               className={`py-4 text-sm font-medium transition-colors relative ${
                 activeTab === tab
-                  ? 'text-[#007F8C]'
+                  ? 'text-[#007F8C] font-bold'
                   : 'text-[#666666] hover:text-[#333333]'
               }`}
             >
