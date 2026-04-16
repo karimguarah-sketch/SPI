@@ -102,9 +102,6 @@ export function ActivityTab({ onStartBulkEdition, items, onDeleteItem }: Props) 
     <div className="flex-1 overflow-y-auto px-8 pt-6 pb-12">
       {/* Quick actions — single CTA */}
       <section className="mb-8 max-w-3xl">
-        <h2 className="text-base font-bold text-[#333333] mb-1">Quick actions</h2>
-        <p className="text-sm text-[#666666] mb-4">Switch supplier - Logistic flow - Site affectation</p>
-
         {/* Breadcrumbs */}
         <div className="flex items-center gap-2 mb-6">
           <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold bg-[#007F8C] text-white">
