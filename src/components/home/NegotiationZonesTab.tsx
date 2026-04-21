@@ -64,15 +64,18 @@ export function NegotiationZonesTab({ onSave }: Props) {
     const fmt = (d: Date) => `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
     const activation = new Date(today);
     activation.setDate(today.getDate() + 14);
+    const reqNum = Math.floor(20000000 + Math.random() * 9999999);
     const item: ActivityItem = {
       id: `nz-${Date.now()}`,
+      requestId: `REQ-${reqNum}`,
       status: 'waiting',
       activationDate: fmt(activation),
       requestDate: fmt(today),
-      requestId: `REQ-${Math.floor(20000000 + Math.random() * 9999999)}`,
+      requestAuthor: String(reqNum),
       referencesCount: changedCount,
       supplier: firstRow ? `${firstRow.supplierName} (${firstRow.supplierCode})` : 'Multiple suppliers',
-      supplierZone: firstRow ? pendingChanges[firstRow.id] : undefined,
+      supplierZone: firstRow ? pendingChanges[firstRow.id] : 'National',
+      supplierDept: '7 - Sanitario',
       circuit: 'Negotiation zone',
       warehouses: `${changedCount} supplier${changedCount > 1 ? 's' : ''} updated`,
     };

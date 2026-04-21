@@ -2,79 +2,113 @@ import { useState, useRef, useEffect } from 'react';
 
 export interface ActivityItem {
   id: string;
-  status: 'waiting' | 'validated' | 'rejected';
-  activationDate?: string;
-  requestDate: string;
   requestId: string;
+  status: 'waiting' | 'validated' | 'rejected';
+  activationDate: string;
+  requestDate: string;
+  requestAuthor: string;
   referencesCount: number;
-  referencesPreview?: string;
-  supplier?: string;
+  supplier: string;
   supplierZone?: 'National' | 'Multi Zone' | 'Group of sites';
   supplierDept?: string;
-  circuit?: string;
-  warehouses?: string;
-  suppliersCount?: number;
-  circuitsCount?: number;
+  circuit: string;
+  warehouses: string;
 }
 
 export const INITIAL_FUTURE_CHANGES: ActivityItem[] = [
   {
-    id: 'c1',
-    status: 'waiting',
-    requestDate: '22/3/2026',
+    id: 'op1',
     requestId: 'REQ-20025420',
+    status: 'waiting',
+    activationDate: '18/3/2026',
+    requestDate: '22/3/2026',
+    requestAuthor: '20025420',
     referencesCount: 444,
-    suppliersCount: 5,
-    circuitsCount: 2,
+    supplier: 'ROCA SANITARIO TR (345657)',
+    supplierZone: 'National',
+    supplierDept: '7 - Sanitario',
+    circuit: 'Direct - DDP',
     warehouses: '112 warehouses',
   },
   {
-    id: 'c2',
+    id: 'op2',
+    requestId: 'REQ-20025420',
     status: 'waiting',
-    activationDate: '02/4/2026',
-    requestDate: '25/3/2026',
-    requestId: 'REQ-20031842',
-    referencesCount: 42,
-    supplier: 'GRUPO PUMA ESPAÑA (204304)',
-    supplierZone: 'Multi Zone',
-    supplierDept: '5 - Puertas y ventanas',
-    circuit: 'Stock - EXW',
+    activationDate: '18/3/2026',
+    requestDate: '22/3/2026',
+    requestAuthor: '20025420',
+    referencesCount: 444,
+    supplier: 'ROCA SANITARIO TR (345657)',
+    supplierZone: 'National',
+    supplierDept: '7 - Sanitario',
+    circuit: 'Direct - DDP',
     warehouses: '29 stores',
   },
   {
-    id: 'c3',
+    id: 'op3',
+    requestId: 'REQ-20025420',
     status: 'waiting',
-    activationDate: '15/4/2026',
-    requestDate: '01/4/2026',
-    requestId: 'REQ-20042567',
-    referencesCount: 128,
-    supplier: 'Henkel Iberica (765456)',
-    supplierZone: 'National',
-    supplierDept: '4 - Adhesivos',
-    circuit: 'Direct - DDP',
-    warehouses: '87 warehouses',
-  },
-  {
-    id: 'c4',
-    status: 'waiting',
-    activationDate: '28/4/2026',
-    requestDate: '10/4/2026',
-    requestId: 'REQ-20055109',
-    referencesCount: 7,
-    supplier: '3M ESPANA (76808)',
+    activationDate: '18/3/2026',
+    requestDate: '22/3/2026',
+    requestAuthor: '20025420',
+    referencesCount: 444,
+    supplier: 'ROCA SANITARIO TR (345657)',
     supplierZone: 'National',
     supplierDept: '7 - Sanitario',
-    circuit: 'Ship from partner - DDP',
-    warehouses: '56 stores',
+    circuit: 'Direct - DDP',
+    warehouses: '112 warehouses',
   },
   {
-    id: 'c5',
+    id: 'op4',
+    requestId: 'REQ-20025420',
     status: 'waiting',
-    activationDate: '12/5/2026',
-    requestDate: '22/4/2026',
-    requestId: 'REQ-20068774',
-    referencesCount: 216,
-    supplier: 'ROCA SANITARIO SA (999888)',
+    activationDate: '18/3/2026',
+    requestDate: '22/3/2026',
+    requestAuthor: '20025420',
+    referencesCount: 444,
+    supplier: 'ROCA SANITARIO TR (345657)',
+    supplierZone: 'National',
+    supplierDept: '7 - Sanitario',
+    circuit: 'Direct - DDP',
+    warehouses: '112 warehouses',
+  },
+  {
+    id: 'op5',
+    requestId: 'REQ-20025420',
+    status: 'waiting',
+    activationDate: '18/3/2026',
+    requestDate: '22/3/2026',
+    requestAuthor: '20025420',
+    referencesCount: 444,
+    supplier: 'ROCA SANITARIO TR (345657)',
+    supplierZone: 'National',
+    supplierDept: '7 - Sanitario',
+    circuit: 'Direct - DDP',
+    warehouses: '112 warehouses',
+  },
+  {
+    id: 'op6',
+    requestId: 'REQ-20025420',
+    status: 'waiting',
+    activationDate: '18/3/2026',
+    requestDate: '22/3/2026',
+    requestAuthor: '20025420',
+    referencesCount: 444,
+    supplier: 'ROCA SANITARIO TR (345657)',
+    supplierZone: 'National',
+    supplierDept: '7 - Sanitario',
+    circuit: 'Direct - DDP',
+    warehouses: '112 warehouses',
+  },
+  {
+    id: 'op7',
+    requestId: 'REQ-20025420',
+    status: 'waiting',
+    activationDate: '18/3/2026',
+    requestDate: '22/3/2026',
+    requestAuthor: '20025420',
+    referencesCount: 444,
+    supplier: 'ROCA SANITARIO TR (345657)',
     supplierZone: 'National',
     supplierDept: '7 - Sanitario',
     circuit: 'Direct - DDP',
@@ -185,7 +219,8 @@ export function ActivityTab({ onStartBulkEdition, items, onDeleteItem }: Props) 
             <div className="flex items-center gap-2 text-sm text-[#333333]">
               <span>References per page</span>
               <select className="h-8 px-2 border border-[#CCCCCC] rounded text-sm bg-white">
-                <option>10</option>
+                <option>100</option>
+                <option>50</option>
                 <option>25</option>
               </select>
               <span className="ml-3 text-[#666666]">1-{items.length} of {items.length} items</span>
@@ -266,16 +301,14 @@ function ActivityRow({ item, onDelete }: { item: ActivityItem; onDelete: (item: 
       {/* Header line */}
       <div className="flex items-center gap-6 px-4 pt-3 pb-2 flex-wrap">
         <StatusBadge status={item.status} />
-        {item.activationDate && (
-          <span className="text-sm text-[#666666]">
-            Activation date <span className="font-bold text-[#333333]">{item.activationDate}</span>
-          </span>
-        )}
+        <span className="text-sm text-[#666666]">
+          Activation date <span className="font-bold text-[#333333]">{item.activationDate}</span>
+        </span>
         <span className="text-sm text-[#666666]">
           Request date <span className="font-bold text-[#333333]">{item.requestDate}</span>
         </span>
         <span className="text-sm text-[#666666]">
-          Request author <span className="font-bold text-[#333333]">{item.requestId.replace('REQ-', '')}</span>
+          Request author <span className="font-bold text-[#333333]">{item.requestAuthor}</span>
         </span>
       </div>
 
@@ -291,64 +324,41 @@ function ActivityRow({ item, onDelete }: { item: ActivityItem; onDelete: (item: 
         </div>
 
         {/* Supplier pill */}
-        {item.suppliersCount !== undefined ? (
-          <div className="bg-[#D9F0F3] rounded-lg px-3 py-2 flex items-center gap-2 text-sm">
-            <svg className="w-4 h-4 text-[#666666] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            <span className="font-bold text-[#333333]">{item.suppliersCount}</span>
-            <span>Suppliers involved</span>
-          </div>
-        ) : item.supplier ? (
-          <div className="bg-[#D9F0F3] rounded-lg px-3 py-2 flex items-center gap-2 text-sm flex-1 min-w-0">
-            <svg className="w-4 h-4 text-[#666666] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="font-bold text-[#333333] text-sm truncate">{item.supplier}</span>
-                {item.supplierZone && (
-                  <span className="text-[10px] font-bold text-[#005C91] bg-[#DAEFF7] border border-[#0B96CC] rounded px-1.5 py-0.5 shrink-0">
-                    {item.supplierZone}
-                  </span>
-                )}
-              </div>
-              {item.supplierDept && (
-                <span className="text-xs text-[#666666]">{item.supplierDept}</span>
+        <div className="bg-[#D9F0F3] rounded-lg px-3 py-2 flex items-center gap-2 text-sm flex-1 min-w-0">
+          <svg className="w-4 h-4 text-[#666666] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-bold text-[#333333] text-sm truncate">{item.supplier}</span>
+              {item.supplierZone && (
+                <span className="text-[10px] font-bold text-[#005C91] bg-[#DAEFF7] border border-[#0B96CC] rounded px-1.5 py-0.5 shrink-0">
+                  {item.supplierZone}
+                </span>
               )}
             </div>
+            {item.supplierDept && (
+              <span className="text-xs text-[#666666]">{item.supplierDept}</span>
+            )}
           </div>
-        ) : null}
+        </div>
 
         {/* Circuit pill */}
-        {item.circuitsCount !== undefined ? (
-          <div className="bg-[#D9F0F3] rounded-lg px-3 py-2 flex items-center gap-2 text-sm shrink-0">
-            <svg className="w-4 h-4 text-[#666666]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1" />
-            </svg>
-            <span className="font-bold">{item.circuitsCount}</span>
-            <span>Circuits involved</span>
-          </div>
-        ) : item.circuit ? (
-          <div className="bg-[#D9F0F3] rounded-lg px-3 py-2 flex items-center gap-2 text-sm shrink-0">
-            <svg className="w-4 h-4 text-[#666666]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1" />
-            </svg>
-            <span>{item.circuit}</span>
-          </div>
-        ) : null}
+        <div className="bg-[#D9F0F3] rounded-lg px-3 py-2 flex items-center gap-2 text-sm shrink-0">
+          <svg className="w-4 h-4 text-[#666666]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1" />
+          </svg>
+          <span>{item.circuit}</span>
+        </div>
 
         {/* Warehouses pill */}
-        {item.warehouses && (
-          <div className="bg-[#D9F0F3] rounded-lg px-3 py-2 flex items-center gap-2 text-sm shrink-0">
-            <svg className="w-4 h-4 text-[#666666]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21V7l9-4 9 4v14M9 21V12h6v9" />
-            </svg>
-            <span>{item.warehouses}</span>
-          </div>
-        )}
+        <div className="bg-[#D9F0F3] rounded-lg px-3 py-2 flex items-center gap-2 text-sm shrink-0">
+          <svg className="w-4 h-4 text-[#666666]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21V7l9-4 9 4v14M9 21V12h6v9" />
+          </svg>
+          <span>{item.warehouses}</span>
+        </div>
 
         {/* Three-dot menu */}
         <div className="ml-auto relative shrink-0" ref={menuRef}>
